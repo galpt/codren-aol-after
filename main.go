@@ -140,8 +140,6 @@ func main() {
 	// Set custom HTTP client
 	Mgr.Gateway.Client = httpclient
 	Mgr.Gateway.Compress = true
-	Mgr.Gateway.Identify.Properties.Browser = "Discord iOS"
-	Mgr.Gateway.UserAgent = uaChrome
 
 	// Register the messageCreate func as a callback for MessageCreate events
 	Mgr.AddHandler(maidsanEmojiReact)
