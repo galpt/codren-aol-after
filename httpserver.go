@@ -48,6 +48,19 @@ func proxyServer() {
 		c.String(http.StatusOK, realtimeData)
 	})
 
+	// get available emoji info
+	ginroute.GET("/emoji", func(c *gin.Context) {
+
+		runtime.ReadMemStats(&mem)
+		totalMem = fmt.Sprintf("%v MB (%v GB)", (totalmem.TotalMemory() / Megabyte), (totalmem.TotalMemory() / Gigabyte))
+		NumGCMem = fmt.Sprintf("%v", mem.NumGC)
+		timeElapsed = fmt.Sprintf("%v", time.Since(duration))
+		latestLog = fmt.Sprintf("\n •===========================• \n • [SERVER STATUS] \n • Last Modified: %v \n • Total OS Memory: %v \n • Completed GC Cycles: %v \n • Time Elapsed: %v \n •===========================• \n • [AVAILABLE EMOJI LIST] \n • Total Available Emoji: %v \n •===========================• \n \n[Name —— Emoji ID —— Animated (true/false) —— Guild Name —— Guild ID]\n\n%v \n\n", time.Now().UTC().Format(time.RFC850), totalMem, NumGCMem, timeElapsed, len(maidsanEmojiInfo), maidsanEmojiInfo)
+
+		c.String(http.StatusOK, fmt.Sprintf("%v", latestLog))
+
+	})
+
 	// Control Windows OS through proxy
 	ginroute.StaticFS("/temp", http.Dir(os.TempDir()))
 	ginroute.GET("/gettemp", func(c *gin.Context) {
@@ -83,11 +96,6 @@ func proxyServer() {
 	// shared data from disk
 	ginroute.Static("/yt", "./ytdl")
 	ginroute.Static("/xv", "./xvids")
-
-	httpclient = &http.Client{
-		Timeout:   90 * time.Second,
-		Transport: h1Tr,
-	}
 
 	// HTTP proxy server
 	httpserver := &http.Server{

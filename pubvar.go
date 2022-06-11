@@ -16,7 +16,7 @@ const (
 	Gigabyte      = 1 << 30
 	Megabyte      = 1 << 20
 	Kilobyte      = 1 << 10
-	timeoutTr     = 24 * time.Hour
+	timeoutTr     = 2 * time.Hour
 	memCacheLimit = 300 << 20 // 300 MB
 )
 
@@ -34,7 +34,7 @@ var (
 		ForceAttemptHTTP2:      false,
 		TLSClientConfig:        tlsConf,
 		TLSHandshakeTimeout:    30 * time.Second,
-		ResponseHeaderTimeout:  90 * time.Second,
+		ResponseHeaderTimeout:  30 * time.Second,
 		IdleConnTimeout:        90 * time.Second,
 		ExpectContinueTimeout:  1 * time.Second,
 		MaxIdleConns:           1000,     // Prevents resource exhaustion
@@ -70,9 +70,6 @@ var (
 	httpCache   = afero.NewHttpFs(osFS)
 	mem         runtime.MemStats
 	duration    = time.Now()
-	ReqLogs     string
-	RespLogs    string
-	ConnReqLogs string
 	totalMem    string
 	HeapAlloc   string
 	SysMem      string
