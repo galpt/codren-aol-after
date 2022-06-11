@@ -10,11 +10,6 @@ import (
 // Maid-san's emoji reactions handler
 func maidsanEmojiReact(s *discordgo.Session, m *discordgo.MessageCreate) {
 
-	var (
-		customEmojiReply    string
-		customEmojiDetected bool
-	)
-
 	// Ignore all messages created by the bot itself
 	// This isn't required in this specific example but it's a good practice.
 	if m.Author.ID == s.State.User.ID {
@@ -63,6 +58,7 @@ func maidsanEmojiReact(s *discordgo.Session, m *discordgo.MessageCreate) {
 				customEmojiIdx++
 			}
 		}
+
 	}
 
 }

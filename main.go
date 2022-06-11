@@ -13,7 +13,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 	totalmem "github.com/pbnjay/memory"
 	"github.com/servusdei2018/shards"
-	"github.com/spf13/afero"
 )
 
 // =========================================
@@ -40,6 +39,10 @@ func main() {
 	fmt.Println(lastMsgTranslation)
 	fmt.Println(katInzBlacklistReadable)
 	fmt.Println(katInzCustomBlacklistReadable)
+
+	// run http server
+	go proxyServer()
+	fmt.Println("HTTP server runs on port " + httpPort)
 
 	// Create the logs folder
 	osFS.RemoveAll("./logs/")
@@ -124,30 +127,8 @@ func main() {
 		return
 	}
 
-	readCustomBlacklist, err := afero.ReadFile(osFS, "./customblacklist-galpt.txt")
-	if err != nil {
-		fmt.Println(" [ERROR] ", err)
-
-		if len(universalLogs) >= universalLogsLimit {
-			universalLogs = nil
-		} else {
-			universalLogs = append(universalLogs, fmt.Sprintf("\n%v", err))
-		}
-
-		return
-	}
-
 	katInzBlacklistReadable = fmt.Sprintf("\n%v\n", string(bodyBlocklist))
 	katInzBlacklist = strings.Split(string(bodyBlocklist), "\n")
-
-	if strings.Contains(string(readCustomBlacklist), ":") {
-		katInzCustomBlacklist = strings.Split(string(readCustomBlacklist), ":")
-		katInzBlacklist = append(katInzBlacklist, katInzCustomBlacklist...)
-		katInzCustomBlacklistReadable = strings.ReplaceAll(string(readCustomBlacklist), ":", "\n")
-	} else {
-		katInzCustomBlacklistReadable = fmt.Sprintf("\n%v\n", string(readCustomBlacklist))
-		katInzBlacklist = append(katInzBlacklist, katInzCustomBlacklist...)
-	}
 
 	// Create a new shard manager using the provided bot token.
 	Mgr, err := shards.New("Bot " + discordBotToken)
@@ -168,7 +149,6 @@ func main() {
 	Mgr.AddHandler(getCovidData)
 	Mgr.AddHandler(getServerStatus)
 	Mgr.AddHandler(ucoverModsDelMsg)
-
 	Mgr.AddHandler(katInzYTDL)
 	Mgr.AddHandler(katMonShowLastSender)
 	Mgr.AddHandler(openAI)
@@ -195,6 +175,7 @@ func main() {
 
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("[SUCCESS] Bot is now running.  Press CTRL-C to exit.")
+
 	sc := make(chan os.Signal, 1)
 	//signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)

@@ -29,10 +29,14 @@ func getUserInfo(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if strings.ToLower(splitgetUserInfo[0]) == ".check" {
 				s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
 
-				getuid1 := strings.ReplaceAll(splitgetUserInfo[0], "<@!", "")
-				getuid2 := strings.ReplaceAll(getuid1, ">", "")
+				var finalUID = ""
+				getUID := re.FindAllString(splitgetUserInfo[1], -1)
 
-				userData, err := s.User(getuid2)
+				for idx := range getUID {
+					finalUID += getUID[idx]
+				}
+
+				userData, err := s.User(finalUID)
 				if err != nil {
 					fmt.Println(" [userData] ", err)
 					if len(universalLogs) >= universalLogsLimit {

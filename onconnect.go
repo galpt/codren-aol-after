@@ -9,12 +9,11 @@ import (
 // This function will be called (due to AddHandler above) every time one
 // of our shards connects.
 func onConnect(s *discordgo.Session, evt *discordgo.Connect) {
+
 	fmt.Printf("[INFO] Shard #%v connected.\n", s.ShardID)
 
 	// reconnect websocket on errors and some other tweaks
 	s.ShouldReconnectOnError = true
-	s.Identify.Compress = true
-	s.Identify.Properties.Browser = "Discord iOS"
 
 	if len(universalLogs) >= universalLogsLimit {
 		universalLogs = nil
@@ -75,9 +74,5 @@ func onConnect(s *discordgo.Session, evt *discordgo.Connect) {
 			customEmojiSlice = append(customEmojiSlice, fmt.Sprintf("%v:%v", getEmoji[idxEmoji].Name, getEmoji[idxEmoji].ID))
 		}
 	}
-
-	// set custom http client and user agent
-	s.Client = httpclient
-	s.UserAgent = uaChrome
 
 }

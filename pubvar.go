@@ -21,14 +21,12 @@ const (
 )
 
 var (
+	httpPort        = ":7777"
 	discordBotToken = "" // fill your discord bot token here
 
 	tlsConf = &tls.Config{
 		InsecureSkipVerify: true,
 	}
-
-	universalLogs      []string
-	universalLogsLimit = 100
 
 	h1Tr = &http.Transport{
 		DisableKeepAlives:      false,
@@ -36,7 +34,7 @@ var (
 		ForceAttemptHTTP2:      false,
 		TLSClientConfig:        tlsConf,
 		TLSHandshakeTimeout:    30 * time.Second,
-		ResponseHeaderTimeout:  30 * time.Second,
+		ResponseHeaderTimeout:  90 * time.Second,
 		IdleConnTimeout:        90 * time.Second,
 		ExpectContinueTimeout:  1 * time.Second,
 		MaxIdleConns:           1000,     // Prevents resource exhaustion
@@ -52,6 +50,9 @@ var (
 		Transport: h1Tr,
 	}
 
+	universalLogs      []string
+	universalLogsLimit = 100
+
 	Mgr *shards.Manager
 
 	statusInt   = 0
@@ -64,16 +65,23 @@ var (
 
 	staffID = []string{"631418827841863712"}
 
-	mem       runtime.MemStats
-	osFS      = afero.NewOsFs()
-	memFS     = afero.NewMemMapFs()
-	duration  = time.Now()
-	totalMem  string
-	HeapAlloc string
-	SysMem    string
-	Frees     string
-	NumGCMem  string
-	winLogs   string
+	osFS        = afero.NewOsFs()
+	memFS       = afero.NewMemMapFs()
+	httpCache   = afero.NewHttpFs(osFS)
+	mem         runtime.MemStats
+	duration    = time.Now()
+	ReqLogs     string
+	RespLogs    string
+	ConnReqLogs string
+	totalMem    string
+	HeapAlloc   string
+	SysMem      string
+	Frees       string
+	NumGCMem    string
+	timeElapsed string
+	latestLog   string
+	winLogs     string
+	tempDirLoc  string
 
 	lastMsgTimestamp   string
 	lastMsgUsername    string
@@ -93,7 +101,6 @@ var (
 
 	katInzBlacklist               []string
 	katInzBlacklistReadable       string
-	katInzCustomBlacklist         []string
 	katInzCustomBlacklistReadable string
 
 	maidsanLogs         []string
@@ -107,15 +114,16 @@ var (
 	msgLogs             []string
 	translateLogs       []string
 
-	maidsanEmojiInfo         []string
 	maidsanWatchCurrentUser  string
 	maidsanWatchPreviousUser string
-
-	replyremoveNewLines string
-	replyremoveSpaces   string
-	replysplitEmojiInfo []string
-	customEmojiIdx      = 0
-	customEmojiSlice    []string
+	maidsanEmojiInfo         []string
+	replyremoveNewLines      string
+	replyremoveSpaces        string
+	replysplitEmojiInfo      []string
+	customEmojiReply         string
+	customEmojiDetected      bool
+	customEmojiIdx           = 0
+	customEmojiSlice         []string
 
 	stickerList []string
 	svstatLock  = false
