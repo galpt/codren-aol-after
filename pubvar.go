@@ -25,7 +25,7 @@ var (
 	discordBotToken = "" // fill your discord bot token here
 
 	tlsConf = &tls.Config{
-		InsecureSkipVerify: true,
+		InsecureSkipVerify: false,
 	}
 
 	h1Tr = &http.Transport{
