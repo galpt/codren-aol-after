@@ -10,7 +10,7 @@ require (
 	github.com/sashabaranov/go-gpt3 v0.0.0-20220314221030-260ef874de6c
 	github.com/servusdei2018/shards v1.2.6
 	github.com/showwin/speedtest-go v1.1.5
-	github.com/spf13/afero v1.8.2
+	github.com/spf13/afero v1.9.0
 	github.com/tidwall/gjson v1.14.1
 	mvdan.cc/xurls/v2 v2.4.0
 )
