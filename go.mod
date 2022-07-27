@@ -6,7 +6,7 @@ require (
 	github.com/bwmarrin/discordgo v0.25.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58
-	github.com/rivo/uniseg v0.2.0
+	github.com/rivo/uniseg v0.3.0
 	github.com/sashabaranov/go-gpt3 v0.0.0-20220314221030-260ef874de6c
 	github.com/servusdei2018/shards v1.2.6
 	github.com/showwin/speedtest-go v1.1.5
